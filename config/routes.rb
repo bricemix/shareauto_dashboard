@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   root "dashboard#index"
   resources :users, only: [:index]
   resources :trips, only: [:index]
+  resource :pricing_rule, only: [:edit, :update]
   resources :verifications, only: [:index] do
     member do
       patch :approve

@@ -33,6 +33,7 @@
           <%= link_to "Utilisateurs", users_path, class: "nav-item #{'active' if current_page?(users_path)}" %>
           <%= link_to "Vérifications", verifications_path, class: "nav-item #{'active' if current_page?(verifications_path)}" %>
           <%= link_to "Trajets", trips_path, class: "nav-item #{'active' if current_page?(trips_path)}" %>
+          <%= link_to "Tarification", edit_pricing_rule_path, class: "nav-item #{'active' if current_page?(edit_pricing_rule_path)}" %>
         </nav>
       </aside>
       

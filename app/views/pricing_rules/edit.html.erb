@@ -1,0 +1,41 @@
+<div class="dashboard-header">
+  <h1 style="font-size: 2rem; margin-bottom: 8px;">Configuration Tarifaire</h1>
+  <p style="color: var(--text-muted); margin-bottom: 32px;">Définissez les règles de prix pour le calcul automatique des courses.</p>
+</div>
+
+<div class="glass-panel" style="padding: 32px; border-radius: 16px; max-width: 600px;">
+  <%= form_with url: pricing_rule_path, method: :patch, local: true do |f| %>
+    <div style="margin-bottom: 24px;">
+      <%= f.label :base_price, "Prix de base (€)", style: "display: block; margin-bottom: 8px; color: var(--text-muted);" %>
+      <%= f.number_field "pricing_rule[base_price]", value: @pricing_rule['base_price'], step: 0.1, class: "search-bar", style: "width: 100%; border-radius: 8px;" %>
+    </div>
+    
+    <div style="margin-bottom: 24px;">
+      <%= f.label :price_per_km, "Prix par Kilomètre (€)", style: "display: block; margin-bottom: 8px; color: var(--text-muted);" %>
+      <%= f.number_field "pricing_rule[price_per_km]", value: @pricing_rule['price_per_km'], step: 0.1, class: "search-bar", style: "width: 100%; border-radius: 8px;" %>
+    </div>
+    
+    <div style="margin-bottom: 24px;">
+      <%= f.label :price_per_passenger, "Supplément par Passager (€)", style: "display: block; margin-bottom: 8px; color: var(--text-muted);" %>
+      <%= f.number_field "pricing_rule[price_per_passenger]", value: @pricing_rule['price_per_passenger'], step: 0.1, class: "search-bar", style: "width: 100%; border-radius: 8px;" %>
+    </div>
+    
+    <div style="margin-bottom: 32px;">
+      <%= f.label :price_per_kg_luggage, "Supplément par Kg de Bagages (€)", style: "display: block; margin-bottom: 8px; color: var(--text-muted);" %>
+      <%= f.number_field "pricing_rule[price_per_kg_luggage]", value: @pricing_rule['price_per_kg_luggage'], step: 0.1, class: "search-bar", style: "width: 100%; border-radius: 8px;" %>
+    </div>
+
+    <%= f.submit "Enregistrer la configuration", style: "background: var(--primary); color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 1rem; width: 100%; transition: background 0.3s;", onmouseover: "this.style.background='var(--primary-hover)'", onmouseout: "this.style.background='var(--primary)'" %>
+  <% end %>
+</div>
+
+<% if flash[:notice] %>
+  <div style="margin-top: 24px; background: rgba(52, 211, 153, 0.2); color: #34d399; padding: 12px 16px; border-radius: 8px; border: 1px solid rgba(52, 211, 153, 0.3);">
+    <%= flash[:notice] %>
+  </div>
+<% end %>
+<% if flash[:alert] %>
+  <div style="margin-top: 24px; background: rgba(239, 68, 68, 0.2); color: #ef4444; padding: 12px 16px; border-radius: 8px; border: 1px solid rgba(239, 68, 68, 0.3);">
+    <%= flash[:alert] %>
+  </div>
+<% end %>
