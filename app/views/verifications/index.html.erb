@@ -1,0 +1,59 @@
+<div class="dashboard-header">
+  <h1 style="font-size: 2rem; margin-bottom: 8px;">Vérifications Partenaires</h1>
+  <p style="color: var(--text-muted); margin-bottom: 32px;">Examinez et validez les documents soumis par les chauffeurs.</p>
+</div>
+
+<div class="data-table-container glass-panel">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Utilisateur</th>
+        <th>Type de Document</th>
+        <th>Fichier</th>
+        <th>Date d'expiration</th>
+        <th>Statut actuel</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if @verifications.empty? %>
+        <tr><td colspan="6" style="text-align: center; color: var(--text-muted);">Aucune vérification trouvée</td></tr>
+      <% else %>
+        <% @verifications.each do |v| %>
+          <tr>
+            <td><strong><%= v['user_email'] %></strong></td>
+            <td><%= v['document_type']&.humanize %></td>
+            <td>
+              <% if v['file_url'].present? %>
+                <a href="<%= v['file_url'] %>" target="_blank" style="color: #818cf8; text-decoration: underline;">Voir le document</a>
+              <% else %>
+                <span style="color: #9ca3af;">Non fourni</span>
+              <% end %>
+            </td>
+            <td><%= v['expiry_date'] || '-' %></td>
+            <td>
+              <% badge_class = case v['status']
+                 when 'approved' then 'status-active'
+                 when 'pending' then 'status-pending'
+                 when 'rejected' then ''
+                 else '' end %>
+              <span class="status-badge <%= badge_class %>" style="<%= "background: rgba(239, 68, 68, 0.2); color: #ef4444;" if v['status'] == 'rejected' %>">
+                <%= v['status']&.capitalize %>
+              </span>
+            </td>
+            <td>
+              <% if v['status'] == 'pending' %>
+                <div style="display: flex; gap: 8px;">
+                  <%= button_to 'Approuver', approve_verification_path(v['id']), method: :patch, class: "status-badge status-active", style: "border: none; cursor: pointer;" %>
+                  <%= button_to 'Rejeter', reject_verification_path(v['id']), method: :patch, class: "status-badge", style: "border: none; cursor: pointer; background: rgba(239, 68, 68, 0.2); color: #ef4444;" %>
+                </div>
+              <% else %>
+                <span style="color: #9ca3af; font-size: 0.875rem;">Traitée</span>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+</div>

@@ -29,10 +29,9 @@
           <span class="badge">Admin</span>
         </div>
         <nav class="sidebar-nav">
-          <a href="/" class="nav-item active">Dashboard</a>
-          <a href="#" class="nav-item">Utilisateurs</a>
-          <a href="#" class="nav-item">Vérifications</a>
-          <a href="#" class="nav-item">Trajets</a>
+          <%= link_to "Dashboard", root_path, class: "nav-item #{'active' if current_page?(root_path)}" %>
+          <%= link_to "Utilisateurs", users_path, class: "nav-item #{'active' if current_page?(users_path)}" %>
+          <%= link_to "Vérifications", verifications_path, class: "nav-item #{'active' if current_page?(verifications_path)}" %>
         </nav>
       </aside>
       

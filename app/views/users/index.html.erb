@@ -1,0 +1,46 @@
+<div class="dashboard-header">
+  <h1 style="font-size: 2rem; margin-bottom: 8px;">Utilisateurs Inscrits</h1>
+  <p style="color: var(--text-muted); margin-bottom: 32px;">Gérez les comptes clients et chauffeurs.</p>
+</div>
+
+<div class="data-table-container glass-panel">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Email</th>
+        <th>Nom Complet</th>
+        <th>Rôle</th>
+        <th>Statut</th>
+        <th>Note</th>
+        <th>Courses</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if @users.empty? %>
+        <tr><td colspan="7" style="text-align: center; color: var(--text-muted);">Aucun utilisateur trouvé</td></tr>
+      <% else %>
+        <% @users.each do |u| %>
+          <tr>
+            <td><%= u['id'] %></td>
+            <td><strong><%= u['email'] %></strong></td>
+            <td><%= u['full_name'] %></td>
+            <td>
+              <% role_class = u['role'] == 'driver' ? 'status-active' : 'status-pending' %>
+              <span class="status-badge <%= role_class %>"><%= u['role']&.capitalize %></span>
+            </td>
+            <td>
+              <% if u['is_active'] %>
+                <span style="color: #34d399; font-weight: 500;">✓ Actif</span>
+              <% else %>
+                <span style="color: #94a3b8;">Inactif</span>
+              <% end %>
+            </td>
+            <td>⭐ <%= u['rating'] %></td>
+            <td><%= u['total_trips'] %></td>
+          </tr>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+</div>
