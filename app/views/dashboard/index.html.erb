@@ -1,30 +1,36 @@
 <div class="dashboard-header">
   <h1 style="font-size: 2rem; margin-bottom: 8px;">Aperçu Global</h1>
   <p style="color: var(--text-muted); margin-bottom: 32px;">Bienvenue sur l'administration de ShareMoto.</p>
+  
+  <% if @api_error %>
+    <div style="background: rgba(239, 68, 68, 0.2); color: #ef4444; padding: 12px 16px; border-radius: 8px; margin-bottom: 24px; border: 1px solid rgba(239, 68, 68, 0.3);">
+      <strong>⚠️ Attention :</strong> Impossible de se connecter à l'API ShareMoto (port 3000). Veuillez vérifier que le serveur API est bien lancé.
+    </div>
+  <% end %>
 </div>
 
 <div class="stats-grid">
   <div class="stat-card glass-panel">
     <span class="stat-title">Utilisateurs Actifs</span>
-    <span class="stat-value">1,248</span>
-    <span class="stat-trend">↑ 12% ce mois</span>
+    <span class="stat-value"><%= @stats['active_users'] %></span>
+    <span class="stat-trend">Inscrits au total</span>
   </div>
   
   <div class="stat-card glass-panel">
     <span class="stat-title">Courses Aujourd'hui</span>
-    <span class="stat-value">342</span>
-    <span class="stat-trend">↑ 5% hier</span>
+    <span class="stat-value"><%= @stats['today_trips'] %></span>
+    <span class="stat-trend">Dernières 24h</span>
   </div>
   
   <div class="stat-card glass-panel">
     <span class="stat-title">Revenus Mensuels</span>
-    <span class="stat-value">€12,450</span>
-    <span class="stat-trend">↑ 18% vs mois préc.</span>
+    <span class="stat-value">€<%= @stats['monthly_revenue'] %></span>
+    <span class="stat-trend">Ce mois-ci</span>
   </div>
   
   <div class="stat-card glass-panel">
     <span class="stat-title">Partenaires en attente</span>
-    <span class="stat-value">24</span>
+    <span class="stat-value"><%= @stats['pending_partners'] %></span>
     <span class="stat-trend" style="color: #fbbf24;">À vérifier</span>
   </div>
 </div>
@@ -44,27 +50,27 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td>#TRP-1042</td>
-        <td>Marie L.</td>
-        <td>Jean D.</td>
-        <td>€15.50</td>
-        <td><span class="status-badge status-active">En cours</span></td>
-      </tr>
-      <tr>
-        <td>#TRP-1041</td>
-        <td>Paul M.</td>
-        <td>Sophie T.</td>
-        <td>€8.20</td>
-        <td><span class="status-badge status-active" style="background: rgba(156, 163, 175, 0.2); color: #9ca3af;">Terminé</span></td>
-      </tr>
-      <tr>
-        <td>#TRP-1040</td>
-        <td>Alice B.</td>
-        <td>-</td>
-        <td>€12.00</td>
-        <td><span class="status-badge status-pending">En attente</span></td>
-      </tr>
+      <% if @recent_trips.empty? %>
+        <tr><td colspan="5" style="text-align: center; color: var(--text-muted);">Aucune course récente</td></tr>
+      <% else %>
+        <% @recent_trips.each do |trip| %>
+          <tr>
+            <td><%= trip['id'] %></td>
+            <td><%= trip['client_name'] %></td>
+            <td><%= trip['driver_name'] %></td>
+            <td>€<%= trip['amount'] %></td>
+            <td>
+              <% badge_class = case trip['status']
+                 when 'in_progress', 'accepted' then 'status-active'
+                 when 'requested' then 'status-pending'
+                 else '' end %>
+              <span class="status-badge <%= badge_class %>" style="<%= "background: rgba(156, 163, 175, 0.2); color: #9ca3af;" if trip['status'] == 'completed' %>">
+                <%= trip['status'].capitalize %>
+              </span>
+            </td>
+          </tr>
+        <% end %>
+      <% end %>
     </tbody>
   </table>
 </div>
