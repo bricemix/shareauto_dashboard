@@ -1,0 +1,45 @@
+<div class="dashboard-header">
+  <h1 style="font-size: 2rem; margin-bottom: 8px;">Historique des Trajets</h1>
+  <p style="color: var(--text-muted); margin-bottom: 32px;">Suivez toutes les courses de la plateforme.</p>
+</div>
+
+<div class="data-table-container glass-panel">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Client</th>
+        <th>Chauffeur</th>
+        <th>Départ</th>
+        <th>Arrivée</th>
+        <th>Tarif</th>
+        <th>Statut</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if @trips.empty? %>
+        <tr><td colspan="7" style="text-align: center; color: var(--text-muted);">Aucun trajet trouvé</td></tr>
+      <% else %>
+        <% @trips.each do |trip| %>
+          <tr>
+            <td><%= trip['id'] %></td>
+            <td><strong><%= trip['client_name'] %></strong></td>
+            <td><%= trip['driver_name'] %></td>
+            <td style="max-width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="<%= trip['origin'] %>"><%= trip['origin'] %></td>
+            <td style="max-width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="<%= trip['destination'] %>"><%= trip['destination'] %></td>
+            <td>€<%= trip['estimated_fare'] %></td>
+            <td>
+              <% badge_class = case trip['status']
+                 when 'in_progress', 'accepted' then 'status-active'
+                 when 'requested' then 'status-pending'
+                 else '' end %>
+              <span class="status-badge <%= badge_class %>" style="<%= "background: rgba(156, 163, 175, 0.2); color: #9ca3af;" if trip['status'] == 'completed' %>">
+                <%= trip['status']&.capitalize %>
+              </span>
+            </td>
+          </tr>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+</div>
